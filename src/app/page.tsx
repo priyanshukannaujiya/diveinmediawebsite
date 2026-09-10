@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -21,7 +21,7 @@ import creatorImage1 from "../../images/Screenshot 2026-09-09 211549.png";
 import creatorImage2 from "../../images/Screenshot 2026-09-09 211609.png";
 import creatorImage3 from "../../images/Screenshot 2026-09-09 211631.png";
 import creatorImage4 from "../../images/Screenshot 2026-09-09 211700.png";
-import homeHeroImage from "../../images/Screenshot 2026-09-10 140620.png";
+import homeHeroImage from "../../images/Screenshot 2026-09-10 171705.png";
 
 const instagramContactLink = "https://www.instagram.com/diveinmedia___/?hl=en";
 const emailContactLink = "https://mail.google.com/mail/?view=cm&fs=1&to=diveinmedia23@gmail.com&su=Work%20With%20Us";
@@ -634,8 +634,8 @@ const campaignCards = [
 
 const footerNav = ["Home", "Why DiveIn", "How It Works", "Creators", "Campaigns", "Contact"];
 
-function AnimatedCounter({ value, suffix = "", className = "" }: { value: number; suffix?: string; className?: string }) {
-  const [displayValue, setDisplayValue] = useState(0);
+function AnimatedCounter({ value, suffix = "", className = "", startValue = 0 }: { value: number; suffix?: string; className?: string; startValue?: number }) {
+  const [displayValue, setDisplayValue] = useState(startValue);
 
   useEffect(() => {
     let frame = 0;
@@ -646,17 +646,19 @@ function AnimatedCounter({ value, suffix = "", className = "" }: { value: number
 
       const progress = Math.min((time - startTime) / 1400, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
-      setDisplayValue(Math.round(value * eased));
+      const nextValue = Math.round(startValue + (value - startValue) * eased);
+      setDisplayValue(nextValue);
 
       if (progress < 1) {
         frame = requestAnimationFrame(tick);
       }
     };
 
+    setDisplayValue(startValue);
     frame = requestAnimationFrame(tick);
 
     return () => cancelAnimationFrame(frame);
-  }, [value]);
+  }, [startValue, value]);
 
   return (
     <span className={className}>
@@ -673,11 +675,12 @@ function Reveal({ children, className = "", delay = 0 }: { children: React.React
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 32, scale: 0.97 }}
-      animate={inView ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 32, scale: 0.97 }}
-      transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1], delay }}
+      initial={{ opacity: 0, y: 32, scale: 0.96, rotateX: 18, rotateY: -12 }}
+      animate={inView ? { opacity: 1, y: 0, scale: 1, rotateX: 0, rotateY: 0 } : { opacity: 0, y: 32, scale: 0.96, rotateX: 18, rotateY: -12 }}
+      whileHover={inView ? { y: -6, rotateX: 4, rotateY: -4, scale: 1.01 } : undefined}
+      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay }}
       className={className}
-      style={{ willChange: "transform, opacity" }}
+      style={{ willChange: "transform, opacity", transformStyle: "preserve-3d", perspective: 1200 }}
     >
       {children}
     </motion.div>
@@ -687,6 +690,14 @@ function Reveal({ children, className = "", delay = 0 }: { children: React.React
 export default function Home() {
   const [selectedRegion, setSelectedRegion] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const problemSectionRef = useRef<HTMLElement | null>(null);
+
+  const { scrollYProgress: problemScrollYProgress } = useScroll({
+    target: problemSectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  const problemGlowOpacity = useTransform(problemScrollYProgress, [0, 0.5, 1], [0.12, 0.7, 0.38]);
 
   return (
     <main className="relative overflow-x-hidden bg-[#050505] text-white">
@@ -769,13 +780,21 @@ export default function Home() {
               </div>
 
               <div className="space-y-5">
-                <h1 className="max-w-[760px] text-5xl font-black uppercase leading-[0.9] tracking-[-0.06em] sm:text-6xl lg:text-[7rem]">
-                  500+ CREATORS.
+                <motion.h1
+                  initial={{ opacity: 0, y: 24, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                  className="max-w-[760px] text-5xl font-black uppercase leading-[0.9] tracking-[-0.06em] sm:text-6xl lg:text-[7rem]"
+                >
+                  <span className="inline-block">
+                    <AnimatedCounter value={500} startValue={1} suffix="+" className="inline-block" />
+                  </span>{" "}
+                  CREATORS.
                   <br />
                   PAN INDIA.
                   <br />
                   <span className="text-lime-300">REAL INFLUENCE.</span>
-                </h1>
+                </motion.h1>
                 <p className="max-w-xl text-base text-white/70 md:text-lg">
                   From niche communities to 1M+ audiences — we connect brands with creators who fit.
                 </p>
@@ -818,8 +837,8 @@ export default function Home() {
                 </motion.div>
 
                 <motion.div
-                  animate={{ y: [0, 14, 0] }}
-                  transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+                  animate={{ y: [0, 18, 0], scale: [1, 1.08, 1] }}
+                  transition={{ duration: 8.5, repeat: Infinity, ease: "easeInOut" }}
                   className="absolute -right-4 bottom-16 rounded-2xl border border-white/15 bg-black/50 p-3 shadow-[0_0_45px_rgba(197,255,42,0.15)] backdrop-blur-xl"
                 >
                   <div className="flex items-center gap-2">
@@ -831,8 +850,8 @@ export default function Home() {
                 </motion.div>
 
                 <motion.div
-                  animate={{ rotate: [-1.5, 1.5, -1.5] }}
-                  transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+                  animate={{ rotate: [-8, -4, -8], scale: [1, 1.12, 1] }}
+                  transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut" }}
                   className="floating-note absolute bottom-20 left-4 rotate-[-8deg] rounded-2xl border border-lime-300/70 bg-lime-300/10 p-3 text-[10px] uppercase tracking-[0.22em] text-lime-200 shadow-[0_0_35px_rgba(197,255,42,0.2)]"
                 >
                   More Than Marketing.
@@ -840,21 +859,24 @@ export default function Home() {
                   It&apos;s People.
                 </motion.div>
 
-                <div className="phone-frame relative mx-auto w-[320px] rounded-[38px] border border-white/15 bg-[#111111] p-3 shadow-[0_25px_60px_rgba(0,0,0,0.7)] sm:w-[360px]">
+                <motion.div
+                  animate={{ y: [0, -12, 0], rotate: [0, 1.2, -1.2, 0], scale: [1, 1.03, 1.06, 1] }}
+                  transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+                  className="phone-frame relative mx-auto w-[320px] rounded-[38px] border border-white/15 bg-[#111111] p-3 shadow-[0_25px_60px_rgba(0,0,0,0.7)] sm:w-[360px]"
+                >
                   <div className="absolute inset-x-10 top-2 h-1 rounded-full bg-white/10" />
                   <div className="overflow-hidden rounded-[30px] border border-white/10 bg-[#0b0b0b]">
                     <div className="flex items-center justify-between border-b border-white/10 bg-black/30 px-4 py-3">
                       <div className="flex items-center gap-3">
                         <Image
-                          src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80"
+                          src={homeHeroImage}
                           alt="Creator profile"
                           width={40}
                           height={40}
-                          unoptimized
                           className="h-10 w-10 rounded-full object-cover"
                         />
                         <div>
-                          <p className="text-sm font-semibold">@ananyafromdelhi</p>
+                          <p className="text-sm font-semibold">@avneetkaur_13</p>
                           <p className="text-[10px] uppercase tracking-[0.2em] text-white/50">Creator</p>
                         </div>
                       </div>
@@ -864,15 +886,22 @@ export default function Home() {
                     </div>
 
                     <div className="bg-[radial-gradient(circle_at_top,_rgba(197,255,42,0.18),transparent_35%)] p-4">
-                      <div className="overflow-hidden rounded-[24px] border border-white/10 bg-[#1b1b1b]">
+                      <motion.div
+                        animate={{ scale: [1, 1.12, 1.06, 1], y: [0, -7, 0] }}
+                        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                        className="overflow-hidden rounded-[24px] border border-white/10 bg-[#1b1b1b]"
+                      >
                         <Image
                           src={homeHeroImage}
                           alt="Creator content"
                           width={900}
                           height={720}
-                          className="h-72 w-full object-cover"
+                          priority
+                          quality={100}
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                          className="h-72 w-full object-cover object-center"
                         />
-                      </div>
+                      </motion.div>
 
                       <div className="mt-4 flex items-center justify-between text-white/70">
                         <div className="flex items-center gap-4">
@@ -884,11 +913,11 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </motion.div>
 
                 <motion.div
-                  animate={{ y: [0, -12, 0], x: [0, 8, 0] }}
-                  transition={{ duration: 9.5, repeat: Infinity, ease: "easeInOut" }}
+                  animate={{ y: [0, -16, 0], x: [0, 10, 0], scale: [1, 1.1, 1] }}
+                  transition={{ duration: 8.8, repeat: Infinity, ease: "easeInOut" }}
                   className="absolute -left-4 bottom-8 rounded-2xl border border-white/15 bg-[#111111]/90 p-3 shadow-[0_0_35px_rgba(0,0,0,0.4)] backdrop-blur-xl"
                 >
                   <div className="flex items-center gap-3">
@@ -905,7 +934,12 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="problem" className="relative z-10 px-4 py-16 md:px-6 lg:px-8 lg:py-24">
+      <section ref={problemSectionRef} id="problem" className="relative z-10 px-4 py-16 md:px-6 lg:px-8 lg:py-24">
+        <motion.div
+          style={{ opacity: problemGlowOpacity }}
+          className="pointer-events-none absolute inset-x-[-5%] top-[-6%] h-[115%] bg-[radial-gradient(circle_at_center,_rgba(197,255,42,0.5),transparent_42%),radial-gradient(circle_at_50%_70%,_rgba(197,255,42,0.22),transparent_58%)] blur-4xl"
+        />
+
         <div className="mx-auto max-w-7xl">
           <Reveal className="mb-10 max-w-3xl">
             <p className="mb-4 text-[10px] uppercase tracking-[0.38em] text-lime-300">Problem</p>
@@ -942,7 +976,7 @@ export default function Home() {
             ))}
           </div>
 
-          <Reveal className="mt-16 rounded-[32px] border border-lime-300/40 bg-gradient-to-r from-lime-300/20 via-lime-300/5 to-transparent p-8 text-black shadow-[0_0_40px_rgba(197,255,42,0.18)] md:p-10">
+          <Reveal className="mt-16 rounded-[32px] border border-lime-300/80 bg-gradient-to-r from-lime-300/35 via-lime-300/15 to-transparent p-8 text-black shadow-[0_0_70px_rgba(197,255,42,0.42)] md:p-10">
             <div className="grid gap-6 md:grid-cols-[0.7fr_1.3fr] md:items-center">
               <div>
                 <p className="text-[10px] uppercase tracking-[0.38em] text-black/60">The answer?</p>
