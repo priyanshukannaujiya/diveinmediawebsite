@@ -887,8 +887,8 @@ function SocialIconShower() {
 
     const spawnBurst = (deltaY: number) => {
       const isMobile = window.innerWidth < 768;
-      const maxIcons = isMobile ? 2 : 6;
-      const burstSize = Math.min(Math.max(1, Math.round(Math.abs(deltaY) / 26)), maxIcons);
+      const maxIcons = isMobile ? 4 : 12;
+      const burstSize = Math.min(Math.max(2, Math.round(Math.abs(deltaY) / 20)), maxIcons);
 
       setIcons((currentIcons) => {
         if (currentIcons.length >= maxIcons) {
@@ -902,27 +902,27 @@ function SocialIconShower() {
           const platform = showerPlatforms[Math.floor(Math.random() * showerPlatforms.length)];
           const edge = Math.random() > 0.5 ? "left" : "right";
           const isLeft = edge === "left";
-          const size = isMobile ? 12 + Math.random() * 6 : 14 + Math.random() * 10;
-          const startX = isLeft ? -20 - Math.random() * 70 : window.innerWidth + 20 + Math.random() * 70;
-          const startY = 80 + Math.random() * Math.max(70, window.innerHeight * 0.45);
+          const size = isMobile ? 14 + Math.random() * 8 : 16 + Math.random() * 12;
+          const startX = isLeft ? -40 - Math.random() * 80 : window.innerWidth + 40 + Math.random() * 80;
+          const startY = 40 + Math.random() * Math.max(80, window.innerHeight * 0.55);
           const directionFactor = deltaY >= 0 ? 1 : -1;
           const travelX = isLeft
-            ? 55 + Math.random() * (isMobile ? 45 : 110)
-            : -(55 + Math.random() * (isMobile ? 45 : 110));
+            ? 80 + Math.random() * (isMobile ? 70 : 150)
+            : -(80 + Math.random() * (isMobile ? 70 : 150));
 
           const icon: ShowerIconItem = {
             id: Date.now() + Math.random() + i,
             platform,
             x: startX,
             y: startY,
-            vx: (isLeft ? 1 : -1) * (0.45 + Math.random() * 0.75) * directionFactor,
-            vy: (Math.random() - 0.5) * 0.45,
+            vx: (isLeft ? 1 : -1) * (0.7 + Math.random() * 1.15) * directionFactor,
+            vy: (Math.random() - 0.5) * 0.6,
             size,
-            opacity: 0.12 + Math.random() * 0.28,
-            rotation: isLeft ? -12 + Math.random() * 12 : 12 - Math.random() * 12,
-            rotationSpeed: (Math.random() - 0.5) * 0.28,
+            opacity: 0.22 + Math.random() * 0.38,
+            rotation: isLeft ? -14 + Math.random() * 14 : 14 - Math.random() * 14,
+            rotationSpeed: (Math.random() - 0.5) * 0.35,
             life: 1,
-            ttl: 1.8 + Math.random() * 0.9,
+            ttl: 1.5 + Math.random() * 0.8,
           };
 
           if (isLeft) {
@@ -982,7 +982,7 @@ function SocialIconShower() {
   }
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-30 hidden overflow-hidden md:block">
+    <div className="pointer-events-none fixed inset-0 z-30 block overflow-hidden">
       {icons.map((icon) => (
         <div
           key={icon.id}
