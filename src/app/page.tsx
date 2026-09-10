@@ -21,10 +21,48 @@ import creatorImage1 from "../../images/Screenshot 2026-09-09 211549.png";
 import creatorImage2 from "../../images/Screenshot 2026-09-09 211609.png";
 import creatorImage3 from "../../images/Screenshot 2026-09-09 211631.png";
 import creatorImage4 from "../../images/Screenshot 2026-09-09 211700.png";
-import homeHeroImage from "../../images/Screenshot 2026-09-10 171705.png";
+import homeHeroImage from "../../images/Gemini_Generated_Image_fu1dckfu1dckfu1d.png";
 
 const instagramContactLink = "https://www.instagram.com/diveinmedia___/?hl=en";
 const emailContactLink = "https://mail.google.com/mail/?view=cm&fs=1&to=diveinmedia23@gmail.com&su=Work%20With%20Us";
+
+const seoSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      name: "DiveIn Media",
+      url: "https://www.diveinmedia.in",
+      sameAs: ["https://www.instagram.com/diveinmedia___/"],
+      email: "diveinmedia23@gmail.com",
+      description:
+        "DiveIn Media is a Mumbai-based influencer marketing agency helping brands connect with the right creators in Mumbai, Delhi NCR, Bengaluru, Hyderabad, Chennai, Pune, Kolkata, and across India.",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Mumbai",
+        addressRegion: "Maharashtra",
+        addressCountry: "IN",
+      },
+      areaServed: ["Mumbai", "Delhi NCR", "Bengaluru", "Hyderabad", "Chennai", "Pune", "Kolkata", "India"],
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "sales",
+        email: "diveinmedia23@gmail.com",
+        availableLanguage: ["English", "Hindi"],
+      },
+    },
+    {
+      "@type": "WebSite",
+      name: "DiveIn Media",
+      url: "https://www.diveinmedia.in",
+      potentialAction: {
+        "@type": "SearchAction",
+        target: "https://www.google.com/search?q={search_term_string}",
+        "query-input": "required name=search_term_string",
+      },
+    },
+  ],
+};
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -33,6 +71,12 @@ const navLinks = [
   { label: "Creators", href: "#creators" },
   { label: "Campaigns", href: "#campaigns" },
   { label: "Brands", href: "#brands" },
+];
+
+const socialMediaLinks = [
+  { label: "Instagram", href: instagramContactLink, short: "IG" },
+  { label: "LinkedIn", href: "#", short: "IN" },
+  { label: "YouTube", href: "#", short: "YT" },
 ];
 
 const problemCards = [
@@ -697,10 +741,40 @@ export default function Home() {
     offset: ["start end", "end start"],
   });
 
+  const { scrollYProgress: overallScrollYProgress } = useScroll();
   const problemGlowOpacity = useTransform(problemScrollYProgress, [0, 0.5, 1], [0.12, 0.7, 0.38]);
+  const socialIconsOpacity = useTransform(overallScrollYProgress, [0, 0.08, 0.2], [0, 0.45, 1]);
+  const socialIconsTranslateY = useTransform(overallScrollYProgress, [0, 0.08, 0.2], [18, 10, 0]);
 
   return (
-    <main className="relative overflow-x-hidden bg-[#050505] text-white">
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(seoSchema) }} />
+      <main className="relative overflow-x-hidden bg-[#050505] text-white">
+        <motion.div
+          aria-label="Social media links"
+          className="pointer-events-none fixed bottom-6 right-4 z-50 hidden md:block"
+          style={{ opacity: socialIconsOpacity, y: socialIconsTranslateY }}
+        >
+          <div className="flex flex-col items-center gap-3 rounded-full border border-white/10 bg-black/45 p-3 shadow-[0_0_40px_rgba(197,255,42,0.12)] backdrop-blur-xl">
+            {socialMediaLinks.map((item, index) => (
+              <motion.a
+                key={item.label}
+                href={item.href}
+                target={item.href.startsWith("http") ? "_blank" : undefined}
+                rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+                initial={{ opacity: 0, y: 24, scale: 0.7 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ delay: 0.12 + index * 0.08, duration: 0.45, ease: "easeOut" }}
+                whileHover={{ scale: 1.12, y: -2 }}
+                whileTap={{ scale: 0.96 }}
+                className="pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full border border-lime-300/50 bg-lime-300/10 text-[10px] font-black uppercase tracking-[0.1em] text-lime-300 shadow-[0_0_18px_rgba(197,255,42,0.15)] transition hover:bg-lime-300 hover:text-black"
+                aria-label={item.label}
+              >
+                {item.short}
+              </motion.a>
+            ))}
+          </div>
+        </motion.div>
       <div className="pointer-events-none fixed inset-0 z-0 opacity-70">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(197,255,42,0.2),transparent_35%),radial-gradient(circle_at_bottom_right,_rgba(197,255,42,0.1),transparent_30%)]" />
       </div>
@@ -796,7 +870,7 @@ export default function Home() {
                   <span className="text-lime-300">REAL INFLUENCE.</span>
                 </motion.h1>
                 <p className="max-w-xl text-base text-white/70 md:text-lg">
-                  From niche communities to 1M+ audiences — we connect brands with creators who fit.
+                  DiveIn Media is a Mumbai-based influencer marketing agency helping brands reach the right audiences in Mumbai, Delhi NCR, Bengaluru, Hyderabad, Chennai, Pune, Kolkata, and across India through authentic creator partnerships.
                 </p>
               </div>
 
@@ -897,7 +971,7 @@ export default function Home() {
                           width={900}
                           height={720}
                           priority
-                          quality={100}
+                          quality={85}
                           sizes="(max-width: 768px) 100vw, 50vw"
                           className="h-72 w-full object-cover object-center"
                         />
@@ -1178,7 +1252,7 @@ export default function Home() {
                         alt={creator.name}
                         width={900}
                         height={720}
-                        unoptimized
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="h-80 w-full object-cover transition duration-500 ease-out group-hover:scale-110"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
@@ -1479,6 +1553,7 @@ export default function Home() {
         </div>
       </footer>
     </main>
+    </>
   );
 }
 
