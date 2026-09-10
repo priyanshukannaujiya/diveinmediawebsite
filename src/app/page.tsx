@@ -887,8 +887,8 @@ function SocialIconShower() {
 
     const spawnBurst = (deltaY: number) => {
       const isMobile = window.innerWidth < 768;
-      const maxIcons = isMobile ? 12 : 32;
-      const burstSize = Math.min(Math.max(5, Math.round(Math.abs(deltaY) / 10)), maxIcons);
+      const maxIcons = isMobile ? 20 : 68;
+      const burstSize = Math.min(Math.max(8, Math.round(Math.abs(deltaY) / 6)), maxIcons);
 
       setIcons((currentIcons) => {
         if (currentIcons.length >= maxIcons) {
@@ -902,27 +902,27 @@ function SocialIconShower() {
           const platform = showerPlatforms[Math.floor(Math.random() * showerPlatforms.length)];
           const edge = Math.random() > 0.5 ? "left" : "right";
           const isLeft = edge === "left";
-          const size = isMobile ? 22 + Math.random() * 14 : 26 + Math.random() * 18;
-          const startX = isLeft ? -10 - Math.random() * 120 : window.innerWidth + 10 + Math.random() * 120;
-          const startY = 10 + Math.random() * Math.max(120, window.innerHeight * 0.7);
+          const size = isMobile ? 30 + Math.random() * 20 : 34 + Math.random() * 24;
+          const startX = isLeft ? -10 - Math.random() * 160 : window.innerWidth + 10 + Math.random() * 160;
+          const startY = 10 + Math.random() * Math.max(160, window.innerHeight * 0.78);
           const directionFactor = deltaY >= 0 ? 1 : -1;
           const travelX = isLeft
-            ? 150 + Math.random() * (isMobile ? 140 : 260)
-            : -(150 + Math.random() * (isMobile ? 140 : 260));
+            ? 240 + Math.random() * (isMobile ? 220 : 380)
+            : -(240 + Math.random() * (isMobile ? 220 : 380));
 
           const icon: ShowerIconItem = {
             id: Date.now() + Math.random() + i,
             platform,
             x: startX,
             y: startY,
-            vx: (isLeft ? 1 : -1) * (1.4 + Math.random() * 1.8) * directionFactor,
-            vy: (Math.random() - 0.5) * 1.1,
+            vx: (isLeft ? 1 : -1) * (2.2 + Math.random() * 2.4) * directionFactor,
+            vy: (Math.random() - 0.5) * 1.5,
             size,
-            opacity: 0.7 + Math.random() * 0.3,
-            rotation: isLeft ? -24 + Math.random() * 24 : 24 - Math.random() * 24,
-            rotationSpeed: (Math.random() - 0.5) * 0.8,
+            opacity: 0.9 + Math.random() * 0.1,
+            rotation: isLeft ? -34 + Math.random() * 34 : 34 - Math.random() * 34,
+            rotationSpeed: (Math.random() - 0.5) * 1.4,
             life: 1,
-            ttl: 0.9 + Math.random() * 0.5,
+            ttl: 0.65 + Math.random() * 0.35,
           };
 
           if (isLeft) {
@@ -952,7 +952,7 @@ function SocialIconShower() {
       const scrollDelta = currentScrollY - lastScrollYRef.current;
       lastScrollYRef.current = currentScrollY;
 
-      if (Math.abs(scrollDelta) < 4) {
+      if (Math.abs(scrollDelta) < 2) {
         return;
       }
 
@@ -1487,24 +1487,6 @@ export default function Home() {
               ))}
             </div>
           </div>
-        </div>
-      </section>
-
-      <section id="locations" className="relative z-10 px-4 py-16 md:px-6 lg:px-8 lg:py-24">
-        <div className="mx-auto max-w-7xl">
-          <Reveal className="mb-12 max-w-3xl">
-            <p className="mb-4 text-[10px] uppercase tracking-[0.38em] text-lime-300">Location targeting</p>
-            <h2 className="text-4xl font-black uppercase leading-[0.92] tracking-[-0.05em] sm:text-5xl lg:text-7xl">
-              YOUR PRODUCT.
-              <br />
-              YOUR AUDIENCE.
-              <br />
-              YOUR LOCATION.
-            </h2>
-            <p className="mt-5 text-base text-white/70 md:text-lg">WE FIND THE CREATOR FIT.</p>
-          </Reveal>
-
-          <IndiaCoverageMap selectedRegion={selectedRegion} onRegionChange={setSelectedRegion} />
         </div>
       </section>
 
