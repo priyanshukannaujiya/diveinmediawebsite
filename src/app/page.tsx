@@ -728,6 +728,293 @@ function Reveal({ children, className = "", delay = 0 }: { children: React.React
   );
 }
 
+type Platform = "instagram" | "youtube" | "facebook" | "tiktok" | "linkedin" | "x";
+
+type ShowerIconItem = {
+  id: number;
+  platform: Platform;
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  size: number;
+  opacity: number;
+  rotation: number;
+  rotationSpeed: number;
+  life: number;
+  ttl: number;
+};
+
+const showerPlatforms: Platform[] = ["instagram", "youtube", "facebook", "tiktok", "linkedin", "x"];
+
+function PlatformGlyph({ platform, size = 18 }: { platform: Platform; size?: number }) {
+  const commonProps = {
+    width: size,
+    height: size,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.8,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+    "aria-hidden": true,
+  };
+
+  switch (platform) {
+    case "instagram":
+      return (
+        <svg {...commonProps}>
+          <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
+          <circle cx="12" cy="12" r="4" />
+          <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none" />
+        </svg>
+      );
+    case "youtube":
+      return (
+        <svg {...commonProps}>
+          <rect x="3.5" y="6" width="17" height="12" rx="3" />
+          <path d="M10 9.5L15.5 12L10 14.5V9.5Z" fill="currentColor" stroke="none" />
+        </svg>
+      );
+    case "facebook":
+      return (
+        <svg {...commonProps}>
+          <path d="M13.5 20V13.2H16L16.4 10.1H13.5V8.2C13.5 7.3 13.8 6.7 15 6.7H16.5V4.1C15.9 4 15.1 4 14.2 4C11.8 4 10.3 5.3 10.3 7.9V10.1H7.8V13.2H10.3V20H13.5Z" fill="currentColor" stroke="none" />
+        </svg>
+      );
+    case "tiktok":
+      return (
+        <svg {...commonProps}>
+          <path d="M14.5 4.5C15.6 5.7 16.4 7.3 16.4 9.1V11.8C15.3 11.5 14.1 11.7 13.1 12.4C11.6 13.4 10.9 15.1 11.1 16.9C11.3 18.8 13 20.2 15 20.2C16.9 20.2 18.4 18.8 18.5 16.9V8.8C18.5 8.5 18.8 8.2 19.1 8.2H19.8V5.7H19.1C17.8 5.7 16.6 5.1 15.8 4.1L14.5 4.5Z" fill="currentColor" stroke="none" />
+          <path d="M14.2 13.7C13.6 12.8 12.6 12.3 11.6 12.3C10.5 12.3 9.4 12.8 8.6 13.8" />
+        </svg>
+      );
+    case "linkedin":
+      return (
+        <svg {...commonProps}>
+          <rect x="3.5" y="3.5" width="17" height="17" rx="4" />
+          <path d="M8.2 10.1V16" />
+          <path d="M8.2 7.8H8.2" />
+          <path d="M11.2 16V12.2C11.2 10.9 12.1 10.2 13.2 10.2C14.3 10.2 15.2 10.9 15.2 12.2V16" />
+        </svg>
+      );
+    case "x":
+      return (
+        <svg {...commonProps}>
+          <path d="M6 6L18 18M18 6L6 18" />
+        </svg>
+      );
+    default:
+      return null;
+  }
+}
+
+function SocialIconShower() {
+  const [icons, setIcons] = useState<ShowerIconItem[]>([]);
+  const reducedMotionRef = useRef<boolean>(false);
+  const lastScrollYRef = useRef<number>(0);
+  const spawnRafRef = useRef<number | null>(null);
+  const tickRafRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const syncReducedMotion = () => {
+      reducedMotionRef.current = mediaQuery.matches;
+    };
+
+    syncReducedMotion();
+
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener("change", syncReducedMotion);
+    }
+
+    return () => {
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener("change", syncReducedMotion);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || reducedMotionRef.current) {
+      return;
+    }
+
+    const tick = () => {
+      setIcons((currentIcons) =>
+        currentIcons
+          .map((icon) => {
+            const nextLife = icon.life - 0.016;
+            const nextX = icon.x + icon.vx;
+            const nextY = icon.y + icon.vy + Math.sin(icon.life * 6) * 0.12;
+            const nextOpacity = Math.min(icon.opacity, Math.max(0, nextLife / icon.ttl));
+
+            return {
+              ...icon,
+              x: nextX,
+              y: nextY,
+              rotation: icon.rotation + icon.rotationSpeed,
+              life: nextLife,
+              opacity: nextOpacity,
+            };
+          })
+          .filter((icon) => {
+            const withinBounds = icon.x > -80 && icon.x < window.innerWidth + 80 && icon.y > -80 && icon.y < window.innerHeight + 80;
+            return icon.life > 0.05 && withinBounds;
+          }),
+      );
+
+      tickRafRef.current = window.requestAnimationFrame(tick);
+    };
+
+    tickRafRef.current = window.requestAnimationFrame(tick);
+
+    return () => {
+      if (tickRafRef.current) {
+        window.cancelAnimationFrame(tickRafRef.current);
+      }
+    };
+  }, [reducedMotionRef.current]);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || reducedMotionRef.current) {
+      return;
+    }
+
+    const spawnBurst = (deltaY: number) => {
+      const isMobile = window.innerWidth < 768;
+      const maxIcons = isMobile ? 2 : 6;
+      const burstSize = Math.min(Math.max(1, Math.round(Math.abs(deltaY) / 26)), maxIcons);
+
+      setIcons((currentIcons) => {
+        if (currentIcons.length >= maxIcons) {
+          return currentIcons;
+        }
+
+        const newIcons: ShowerIconItem[] = [];
+        const currentCount = Math.min(maxIcons - currentIcons.length, burstSize);
+
+        for (let i = 0; i < currentCount; i += 1) {
+          const platform = showerPlatforms[Math.floor(Math.random() * showerPlatforms.length)];
+          const edge = Math.random() > 0.5 ? "left" : "right";
+          const isLeft = edge === "left";
+          const size = isMobile ? 12 + Math.random() * 6 : 14 + Math.random() * 10;
+          const startX = isLeft ? -20 - Math.random() * 70 : window.innerWidth + 20 + Math.random() * 70;
+          const startY = 80 + Math.random() * Math.max(70, window.innerHeight * 0.45);
+          const directionFactor = deltaY >= 0 ? 1 : -1;
+          const travelX = isLeft
+            ? 55 + Math.random() * (isMobile ? 45 : 110)
+            : -(55 + Math.random() * (isMobile ? 45 : 110));
+
+          const icon: ShowerIconItem = {
+            id: Date.now() + Math.random() + i,
+            platform,
+            x: startX,
+            y: startY,
+            vx: (isLeft ? 1 : -1) * (0.45 + Math.random() * 0.75) * directionFactor,
+            vy: (Math.random() - 0.5) * 0.45,
+            size,
+            opacity: 0.12 + Math.random() * 0.28,
+            rotation: isLeft ? -12 + Math.random() * 12 : 12 - Math.random() * 12,
+            rotationSpeed: (Math.random() - 0.5) * 0.28,
+            life: 1,
+            ttl: 1.8 + Math.random() * 0.9,
+          };
+
+          if (isLeft) {
+            icon.vx = Math.max(icon.vx, 0.6);
+          } else {
+            icon.vx = Math.min(icon.vx, -0.6);
+          }
+
+          if (Math.random() > 0.7) {
+            icon.vy -= 0.3;
+          }
+
+          if (Math.random() > 0.8) {
+            icon.rotationSpeed *= 1.7;
+          }
+
+          icon.vx += (travelX / 180) * (isLeft ? 0.2 : -0.2);
+          newIcons.push(icon);
+        }
+
+        return [...currentIcons, ...newIcons].slice(-maxIcons);
+      });
+    };
+
+    const onScroll = () => {
+      const currentScrollY = window.scrollY;
+      const scrollDelta = currentScrollY - lastScrollYRef.current;
+      lastScrollYRef.current = currentScrollY;
+
+      if (Math.abs(scrollDelta) < 4) {
+        return;
+      }
+
+      if (spawnRafRef.current) {
+        window.cancelAnimationFrame(spawnRafRef.current);
+      }
+
+      spawnRafRef.current = window.requestAnimationFrame(() => {
+        spawnBurst(scrollDelta);
+        spawnRafRef.current = null;
+      });
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+
+      if (spawnRafRef.current) {
+        window.cancelAnimationFrame(spawnRafRef.current);
+      }
+    };
+  }, [reducedMotionRef.current]);
+
+  if (reducedMotionRef.current) {
+    return null;
+  }
+
+  return (
+    <div className="pointer-events-none fixed inset-0 z-30 hidden overflow-hidden md:block">
+      {icons.map((icon) => (
+        <div
+          key={icon.id}
+          className="absolute"
+          style={{
+            left: icon.x,
+            top: icon.y,
+            width: icon.size,
+            height: icon.size,
+            opacity: icon.opacity,
+            transform: `translate(-50%, -50%) rotate(${icon.rotation}deg)`,
+            filter: `drop-shadow(0 0 ${Math.max(4, icon.size * 0.45)}px rgba(197, 255, 42, 0.25))`,
+            willChange: "transform, opacity",
+          }}
+        >
+          <div
+            className="flex items-center justify-center rounded-full border border-lime-300/30 bg-black/25"
+            style={{
+              width: icon.size,
+              height: icon.size,
+              color: "rgba(197, 255, 42, 0.85)",
+              boxShadow: "inset 0 0 0 1px rgba(197,255,42,0.18), 0 0 16px rgba(197,255,42,0.16)",
+            }}
+          >
+            <PlatformGlyph platform={icon.platform} size={Math.max(10, icon.size * 0.45)} />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function Home() {
   const [selectedRegion, setSelectedRegion] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -740,17 +1027,20 @@ export default function Home() {
 
   const { scrollYProgress: overallScrollYProgress } = useScroll();
   const problemGlowOpacity = useTransform(problemScrollYProgress, [0, 0.5, 1], [0.12, 0.7, 0.38]);
-  const socialIconsOpacity = useTransform(overallScrollYProgress, [0, 0.08, 0.2], [0, 0.45, 1]);
-  const socialIconsTranslateY = useTransform(overallScrollYProgress, [0, 0.08, 0.2], [18, 10, 0]);
+  const socialIconsOpacity = useTransform(overallScrollYProgress, [0, 0.05, 0.18, 1], [0, 0.3, 1, 1]);
+  const socialIconsTranslateY = useTransform(overallScrollYProgress, [0, 0.05, 0.18, 1], [30, 18, 0, 0]);
+  const socialIconsRotate = useTransform(overallScrollYProgress, [0, 0.15, 1], [-6, 0, 2]);
+  const socialIconsScale = useTransform(overallScrollYProgress, [0, 0.1, 0.25, 1], [0.8, 0.9, 1, 1]);
 
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(seoSchema) }} />
+      <SocialIconShower />
       <main className="relative overflow-x-hidden bg-[#050505] text-white">
         <motion.div
           aria-label="Social media links"
           className="pointer-events-none fixed bottom-6 right-4 z-50 hidden md:block"
-          style={{ opacity: socialIconsOpacity, y: socialIconsTranslateY }}
+          style={{ opacity: socialIconsOpacity, y: socialIconsTranslateY, rotate: socialIconsRotate, scale: socialIconsScale }}
         >
           <div className="flex flex-col items-center gap-3 rounded-full border border-white/10 bg-black/45 p-3 shadow-[0_0_40px_rgba(197,255,42,0.12)] backdrop-blur-xl">
             {socialMediaLinks.map((item, index) => (
@@ -762,9 +1052,9 @@ export default function Home() {
                 initial={{ opacity: 0, y: 24, scale: 0.7 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ delay: 0.12 + index * 0.08, duration: 0.45, ease: "easeOut" }}
-                whileHover={{ scale: 1.12, y: -2 }}
+                whileHover={{ scale: 1.18, y: -4, rotate: 2 }}
                 whileTap={{ scale: 0.96 }}
-                className="pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full border border-lime-300/50 bg-lime-300/10 text-[10px] font-black uppercase tracking-[0.1em] text-lime-300 shadow-[0_0_18px_rgba(197,255,42,0.15)] transition hover:bg-lime-300 hover:text-black"
+                className="pointer-events-auto flex h-11 w-11 items-center justify-center rounded-full border border-lime-300/50 bg-[radial-gradient(circle_at_center,_rgba(197,255,42,0.32),rgba(197,255,42,0.10)_40%,rgba(17,17,17,0.85)_100%)] text-[10px] font-black uppercase tracking-[0.1em] text-lime-300 shadow-[0_0_24px_rgba(197,255,42,0.18)] transition hover:bg-lime-300 hover:text-black"
                 aria-label={item.label}
               >
                 {item.short}
