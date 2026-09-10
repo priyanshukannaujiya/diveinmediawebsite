@@ -887,8 +887,8 @@ function SocialIconShower() {
 
     const spawnBurst = (deltaY: number) => {
       const isMobile = window.innerWidth < 768;
-      const maxIcons = isMobile ? 20 : 68;
-      const burstSize = Math.min(Math.max(8, Math.round(Math.abs(deltaY) / 6)), maxIcons);
+      const maxIcons = isMobile ? 8 : 18;
+      const burstSize = Math.min(Math.max(2, Math.round(Math.abs(deltaY) / 14)), maxIcons);
 
       setIcons((currentIcons) => {
         if (currentIcons.length >= maxIcons) {
@@ -902,27 +902,27 @@ function SocialIconShower() {
           const platform = showerPlatforms[Math.floor(Math.random() * showerPlatforms.length)];
           const edge = Math.random() > 0.5 ? "left" : "right";
           const isLeft = edge === "left";
-          const size = isMobile ? 30 + Math.random() * 20 : 34 + Math.random() * 24;
-          const startX = isLeft ? -10 - Math.random() * 160 : window.innerWidth + 10 + Math.random() * 160;
-          const startY = 10 + Math.random() * Math.max(160, window.innerHeight * 0.78);
+          const size = isMobile ? 14 + Math.random() * 8 : 16 + Math.random() * 10;
+          const startX = isLeft ? -20 - Math.random() * 110 : window.innerWidth + 20 + Math.random() * 110;
+          const startY = 20 + Math.random() * Math.max(100, window.innerHeight * 0.6);
           const directionFactor = deltaY >= 0 ? 1 : -1;
           const travelX = isLeft
-            ? 240 + Math.random() * (isMobile ? 220 : 380)
-            : -(240 + Math.random() * (isMobile ? 220 : 380));
+            ? 120 + Math.random() * (isMobile ? 90 : 170)
+            : -(120 + Math.random() * (isMobile ? 90 : 170));
 
           const icon: ShowerIconItem = {
             id: Date.now() + Math.random() + i,
             platform,
             x: startX,
             y: startY,
-            vx: (isLeft ? 1 : -1) * (2.2 + Math.random() * 2.4) * directionFactor,
-            vy: (Math.random() - 0.5) * 1.5,
+            vx: (isLeft ? 1 : -1) * (1 + Math.random() * 1.25) * directionFactor,
+            vy: (Math.random() - 0.5) * 0.9,
             size,
-            opacity: 0.9 + Math.random() * 0.1,
-            rotation: isLeft ? -34 + Math.random() * 34 : 34 - Math.random() * 34,
-            rotationSpeed: (Math.random() - 0.5) * 1.4,
+            opacity: 0.5 + Math.random() * 0.22,
+            rotation: isLeft ? -18 + Math.random() * 18 : 18 - Math.random() * 18,
+            rotationSpeed: (Math.random() - 0.5) * 0.8,
             life: 1,
-            ttl: 0.65 + Math.random() * 0.35,
+            ttl: 0.95 + Math.random() * 0.5,
           };
 
           if (isLeft) {
@@ -952,7 +952,7 @@ function SocialIconShower() {
       const scrollDelta = currentScrollY - lastScrollYRef.current;
       lastScrollYRef.current = currentScrollY;
 
-      if (Math.abs(scrollDelta) < 2) {
+      if (Math.abs(scrollDelta) < 6) {
         return;
       }
 
