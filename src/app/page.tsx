@@ -21,6 +21,7 @@ import creatorImage1 from "../../images/Screenshot 2026-09-09 211549.png";
 import creatorImage2 from "../../images/Screenshot 2026-09-09 211609.png";
 import creatorImage3 from "../../images/Screenshot 2026-09-09 211631.png";
 import creatorImage4 from "../../images/Screenshot 2026-09-09 211700.png";
+import homeHeroImage from "../../images/Screenshot 2026-09-10 140620.png";
 
 const instagramContactLink = "https://www.instagram.com/diveinmedia___/?hl=en";
 const emailContactLink = "https://mail.google.com/mail/?view=cm&fs=1&to=diveinmedia23@gmail.com&su=Work%20With%20Us";
@@ -865,11 +866,10 @@ export default function Home() {
                     <div className="bg-[radial-gradient(circle_at_top,_rgba(197,255,42,0.18),transparent_35%)] p-4">
                       <div className="overflow-hidden rounded-[24px] border border-white/10 bg-[#1b1b1b]">
                         <Image
-                          src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80"
+                          src={homeHeroImage}
                           alt="Creator content"
                           width={900}
                           height={720}
-                          unoptimized
                           className="h-72 w-full object-cover"
                         />
                       </div>
