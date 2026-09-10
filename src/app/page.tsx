@@ -887,8 +887,8 @@ function SocialIconShower() {
 
     const spawnBurst = (deltaY: number) => {
       const isMobile = window.innerWidth < 768;
-      const maxIcons = isMobile ? 6 : 18;
-      const burstSize = Math.min(Math.max(3, Math.round(Math.abs(deltaY) / 15)), maxIcons);
+      const maxIcons = isMobile ? 8 : 24;
+      const burstSize = Math.min(Math.max(4, Math.round(Math.abs(deltaY) / 12)), maxIcons);
 
       setIcons((currentIcons) => {
         if (currentIcons.length >= maxIcons) {
@@ -902,27 +902,27 @@ function SocialIconShower() {
           const platform = showerPlatforms[Math.floor(Math.random() * showerPlatforms.length)];
           const edge = Math.random() > 0.5 ? "left" : "right";
           const isLeft = edge === "left";
-          const size = isMobile ? 16 + Math.random() * 10 : 18 + Math.random() * 14;
-          const startX = isLeft ? -30 - Math.random() * 90 : window.innerWidth + 30 + Math.random() * 90;
-          const startY = 30 + Math.random() * Math.max(90, window.innerHeight * 0.6);
+          const size = isMobile ? 18 + Math.random() * 12 : 20 + Math.random() * 16;
+          const startX = isLeft ? -20 - Math.random() * 100 : window.innerWidth + 20 + Math.random() * 100;
+          const startY = 20 + Math.random() * Math.max(100, window.innerHeight * 0.65);
           const directionFactor = deltaY >= 0 ? 1 : -1;
           const travelX = isLeft
-            ? 100 + Math.random() * (isMobile ? 90 : 180)
-            : -(100 + Math.random() * (isMobile ? 90 : 180));
+            ? 120 + Math.random() * (isMobile ? 110 : 220)
+            : -(120 + Math.random() * (isMobile ? 110 : 220));
 
           const icon: ShowerIconItem = {
             id: Date.now() + Math.random() + i,
             platform,
             x: startX,
             y: startY,
-            vx: (isLeft ? 1 : -1) * (0.9 + Math.random() * 1.3) * directionFactor,
-            vy: (Math.random() - 0.5) * 0.75,
+            vx: (isLeft ? 1 : -1) * (1.1 + Math.random() * 1.45) * directionFactor,
+            vy: (Math.random() - 0.5) * 0.9,
             size,
-            opacity: 0.38 + Math.random() * 0.32,
-            rotation: isLeft ? -18 + Math.random() * 18 : 18 - Math.random() * 18,
-            rotationSpeed: (Math.random() - 0.5) * 0.45,
+            opacity: 0.5 + Math.random() * 0.35,
+            rotation: isLeft ? -20 + Math.random() * 20 : 20 - Math.random() * 20,
+            rotationSpeed: (Math.random() - 0.5) * 0.6,
             life: 1,
-            ttl: 1.25 + Math.random() * 0.65,
+            ttl: 1.05 + Math.random() * 0.6,
           };
 
           if (isLeft) {
@@ -994,7 +994,7 @@ function SocialIconShower() {
             height: icon.size,
             opacity: icon.opacity,
             transform: `translate(-50%, -50%) rotate(${icon.rotation}deg)`,
-            filter: `drop-shadow(0 0 ${Math.max(4, icon.size * 0.45)}px rgba(197, 255, 42, 0.25))`,
+            filter: `drop-shadow(0 0 ${Math.max(8, icon.size * 0.8)}px rgba(197, 255, 42, 0.55))`,
             willChange: "transform, opacity",
           }}
         >
@@ -1004,7 +1004,7 @@ function SocialIconShower() {
               width: icon.size,
               height: icon.size,
               color: "rgba(197, 255, 42, 0.85)",
-              boxShadow: "inset 0 0 0 1px rgba(197,255,42,0.18), 0 0 16px rgba(197,255,42,0.16)",
+              boxShadow: "inset 0 0 0 1px rgba(197,255,42,0.28), 0 0 24px rgba(197,255,42,0.38)",
             }}
           >
             <PlatformGlyph platform={icon.platform} size={Math.max(10, icon.size * 0.45)} />
