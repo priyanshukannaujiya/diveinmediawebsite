@@ -1,0 +1,152 @@
+@import "tailwindcss";
+
+:root {
+  --background: #050505;
+  --foreground: #f5f5f5;
+  --lime: #c5ff2a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: "Segoe UI", Arial, sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Segoe UI", Arial, sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    radial-gradient(circle at 20% 20%, rgba(197, 255, 42, 0.08), transparent 28%),
+    radial-gradient(circle at 80% 0%, rgba(255, 255, 255, 0.04), transparent 30%);
+  background-size: 32px 32px, 32px 32px, 100% 100%, 100% 100%;
+  opacity: 0.7;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0c0c0c;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(197, 255, 42, 0.45);
+  border-radius: 9999px;
+}
+
+.soft-card {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.soft-card:hover {
+  transform: translateY(-4px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 18px 38px rgba(0, 0, 0, 0.28);
+}
+
+.phone-frame {
+  position: relative;
+  border-radius: 38px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 28px 60px rgba(0, 0, 0, 0.9);
+}
+
+.phone-frame::before {
+  content: "";
+  position: absolute;
+  inset: 10px 14px auto 14px;
+  height: 24px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.floating-note {
+  backdrop-filter: blur(12px);
+}
+
+.magnetic-btn {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s ease,
+    border-color 0.35s ease,
+    background-color 0.35s ease,
+    color 0.35s ease,
+    filter 0.35s ease;
+  will-change: transform, box-shadow;
+}
+
+.magnetic-btn:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 16px 32px rgba(197, 255, 42, 0.16);
+}
+
+.magnetic-btn:active {
+  transform: translateY(0) scale(0.99);
+}
+
+.magnetic-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+  transform: translateX(-120%);
+  transition: transform 0.5s ease;
+}
+
+.magnetic-btn:hover::before {
+  transform: translateX(120%);
+}
+
+.creator-card,
+.campaign-card {
+  transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.creator-card:hover,
+.campaign-card:hover {
+  border-color: rgba(197, 255, 42, 0.55);
+  box-shadow: 0 0 0 1px rgba(197, 255, 42, 0.24), 0 18px 36px rgba(0, 0, 0, 0.45), 0 0 24px rgba(197, 255, 42, 0.14);
+}
+
+@media (max-width: 768px) {
+  body::before {
+    background-size: 24px 24px, 24px 24px, 100% 100%, 100% 100%;
+  }
+}
