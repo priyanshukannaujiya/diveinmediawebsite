@@ -887,8 +887,8 @@ function SocialIconShower() {
 
     const spawnBurst = (deltaY: number) => {
       const isMobile = window.innerWidth < 768;
-      const maxIcons = isMobile ? 4 : 12;
-      const burstSize = Math.min(Math.max(2, Math.round(Math.abs(deltaY) / 20)), maxIcons);
+      const maxIcons = isMobile ? 6 : 18;
+      const burstSize = Math.min(Math.max(3, Math.round(Math.abs(deltaY) / 15)), maxIcons);
 
       setIcons((currentIcons) => {
         if (currentIcons.length >= maxIcons) {
@@ -902,27 +902,27 @@ function SocialIconShower() {
           const platform = showerPlatforms[Math.floor(Math.random() * showerPlatforms.length)];
           const edge = Math.random() > 0.5 ? "left" : "right";
           const isLeft = edge === "left";
-          const size = isMobile ? 14 + Math.random() * 8 : 16 + Math.random() * 12;
-          const startX = isLeft ? -40 - Math.random() * 80 : window.innerWidth + 40 + Math.random() * 80;
-          const startY = 40 + Math.random() * Math.max(80, window.innerHeight * 0.55);
+          const size = isMobile ? 16 + Math.random() * 10 : 18 + Math.random() * 14;
+          const startX = isLeft ? -30 - Math.random() * 90 : window.innerWidth + 30 + Math.random() * 90;
+          const startY = 30 + Math.random() * Math.max(90, window.innerHeight * 0.6);
           const directionFactor = deltaY >= 0 ? 1 : -1;
           const travelX = isLeft
-            ? 80 + Math.random() * (isMobile ? 70 : 150)
-            : -(80 + Math.random() * (isMobile ? 70 : 150));
+            ? 100 + Math.random() * (isMobile ? 90 : 180)
+            : -(100 + Math.random() * (isMobile ? 90 : 180));
 
           const icon: ShowerIconItem = {
             id: Date.now() + Math.random() + i,
             platform,
             x: startX,
             y: startY,
-            vx: (isLeft ? 1 : -1) * (0.7 + Math.random() * 1.15) * directionFactor,
-            vy: (Math.random() - 0.5) * 0.6,
+            vx: (isLeft ? 1 : -1) * (0.9 + Math.random() * 1.3) * directionFactor,
+            vy: (Math.random() - 0.5) * 0.75,
             size,
-            opacity: 0.22 + Math.random() * 0.38,
-            rotation: isLeft ? -14 + Math.random() * 14 : 14 - Math.random() * 14,
-            rotationSpeed: (Math.random() - 0.5) * 0.35,
+            opacity: 0.38 + Math.random() * 0.32,
+            rotation: isLeft ? -18 + Math.random() * 18 : 18 - Math.random() * 18,
+            rotationSpeed: (Math.random() - 0.5) * 0.45,
             life: 1,
-            ttl: 1.5 + Math.random() * 0.8,
+            ttl: 1.25 + Math.random() * 0.65,
           };
 
           if (isLeft) {
