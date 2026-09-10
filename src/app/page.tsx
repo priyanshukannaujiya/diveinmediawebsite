@@ -104,6 +104,442 @@ const creatorRegions = [
   },
 ];
 
+const cityNodes = [
+  { name: "Ahmedabad", state: "Gujarat", lon: 72.57, lat: 23.03, creators: "2,481", campaigns: "84", avgReach: "52.4K", categories: ["Fashion", "Food", "Beauty", "Lifestyle"] },
+  { name: "Surat", state: "Gujarat", lon: 72.96, lat: 21.17, creators: "1,892", campaigns: "62", avgReach: "47.8K", categories: ["Retail", "Fashion", "Lifestyle"] },
+  { name: "Vadodara", state: "Gujarat", lon: 73.17, lat: 22.3, creators: "1,341", campaigns: "39", avgReach: "41.2K", categories: ["Food", "Travel", "Lifestyle"] },
+  { name: "Rajkot", state: "Gujarat", lon: 70.8, lat: 22.3, creators: "1,126", campaigns: "28", avgReach: "36.1K", categories: ["Lifestyle", "Retail", "Culture"] },
+  { name: "Jaipur", state: "Rajasthan", lon: 75.82, lat: 26.92, creators: "1,742", campaigns: "57", avgReach: "44.6K", categories: ["Lifestyle", "Travel", "Fashion"] },
+  { name: "Mumbai", state: "Maharashtra", lon: 72.88, lat: 19.08, creators: "3,462", campaigns: "142", avgReach: "89.4K", categories: ["Fashion", "Lifestyle", "Beauty", "Food"] },
+  { name: "Delhi NCR", state: "Delhi", lon: 77.1, lat: 28.7, creators: "3,118", campaigns: "136", avgReach: "82.7K", categories: ["Lifestyle", "Culture", "Fashion", "Tech"] },
+  { name: "Bengaluru", state: "Karnataka", lon: 77.59, lat: 12.97, creators: "2,641", campaigns: "97", avgReach: "76.3K", categories: ["Tech", "Lifestyle", "Fashion", "Travel"] },
+  { name: "Hyderabad", state: "Telangana", lon: 78.49, lat: 17.38, creators: "2,204", campaigns: "83", avgReach: "63.9K", categories: ["Food", "Beauty", "Lifestyle", "Retail"] },
+  { name: "Chennai", state: "Tamil Nadu", lon: 80.27, lat: 13.09, creators: "1,951", campaigns: "71", avgReach: "58.4K", categories: ["Lifestyle", "Travel", "Fashion"] },
+  { name: "Kolkata", state: "West Bengal", lon: 88.36, lat: 22.57, creators: "1,876", campaigns: "68", avgReach: "49.7K", categories: ["Culture", "Food", "Lifestyle", "Fashion"] },
+  { name: "Pune", state: "Maharashtra", lon: 73.85, lat: 18.52, creators: "1,711", campaigns: "53", avgReach: "56.8K", categories: ["Lifestyle", "Fitness", "Travel", "Tech"] },
+  { name: "Chandigarh", state: "Punjab", lon: 76.78, lat: 30.73, creators: "1,026", campaigns: "22", avgReach: "31.2K", categories: ["Lifestyle", "Food", "Culture"] },
+  { name: "Lucknow", state: "Uttar Pradesh", lon: 80.95, lat: 26.85, creators: "1,214", campaigns: "24", avgReach: "33.8K", categories: ["Lifestyle", "Food", "Culture"] },
+  { name: "Indore", state: "Madhya Pradesh", lon: 75.85, lat: 22.72, creators: "1,119", campaigns: "30", avgReach: "36.5K", categories: ["Food", "Retail", "Lifestyle"] },
+  { name: "Bhopal", state: "Madhya Pradesh", lon: 77.41, lat: 23.26, creators: "1,043", campaigns: "21", avgReach: "32.7K", categories: ["Travel", "Lifestyle", "Culture"] },
+  { name: "Dehradun", state: "Uttarakhand", lon: 78.04, lat: 30.32, creators: "852", campaigns: "18", avgReach: "24.9K", categories: ["Travel", "Lifestyle", "Culture"] },
+  { name: "Kochi", state: "Kerala", lon: 76.27, lat: 9.97, creators: "1,214", campaigns: "39", avgReach: "43.8K", categories: ["Food", "Travel", "Beauty", "Lifestyle"] },
+  { name: "Coimbatore", state: "Tamil Nadu", lon: 76.96, lat: 11.02, creators: "1,025", campaigns: "27", avgReach: "31.4K", categories: ["Fashion", "Lifestyle", "Food"] },
+  { name: "Mysuru", state: "Karnataka", lon: 76.65, lat: 12.31, creators: "939", campaigns: "19", avgReach: "27.8K", categories: ["Culture", "Travel", "Lifestyle"] },
+  { name: "Visakhapatnam", state: "Andhra Pradesh", lon: 83.3, lat: 17.68, creators: "949", campaigns: "20", avgReach: "29.1K", categories: ["Food", "Travel", "Lifestyle"] },
+  { name: "Bhubaneswar", state: "Odisha", lon: 85.82, lat: 20.27, creators: "914", campaigns: "24", avgReach: "28.7K", categories: ["Culture", "Lifestyle", "Travel"] },
+  { name: "Patna", state: "Bihar", lon: 85.14, lat: 25.61, creators: "825", campaigns: "18", avgReach: "22.6K", categories: ["Culture", "Education", "Lifestyle"] },
+  { name: "Ranchi", state: "Jharkhand", lon: 85.31, lat: 23.35, creators: "784", campaigns: "16", avgReach: "25.3K", categories: ["Culture", "Lifestyle", "Travel"] },
+  { name: "Nagpur", state: "Maharashtra", lon: 79.09, lat: 21.15, creators: "1,011", campaigns: "21", avgReach: "29.8K", categories: ["Culture", "Retail", "Lifestyle"] },
+];
+
+const stateMetrics: Record<string, { creators: string; campaigns: string; avgReach: string }> = {
+  Gujarat: { creators: "2,481", campaigns: "184", avgReach: "48.2K" },
+  Maharashtra: { creators: "3,462", campaigns: "142", avgReach: "89.4K" },
+  Rajasthan: { creators: "1,742", campaigns: "57", avgReach: "44.6K" },
+  "Madhya Pradesh": { creators: "1,119", campaigns: "30", avgReach: "36.5K" },
+  Delhi: { creators: "3,118", campaigns: "136", avgReach: "82.7K" },
+  Karnataka: { creators: "2,641", campaigns: "97", avgReach: "76.3K" },
+  Telangana: { creators: "2,204", campaigns: "83", avgReach: "63.9K" },
+  "Tamil Nadu": { creators: "1,951", campaigns: "71", avgReach: "58.4K" },
+  Kerala: { creators: "1,214", campaigns: "39", avgReach: "43.8K" },
+  "West Bengal": { creators: "1,876", campaigns: "68", avgReach: "49.7K" },
+  "Uttar Pradesh": { creators: "1,214", campaigns: "24", avgReach: "33.8K" },
+  Bihar: { creators: "825", campaigns: "18", avgReach: "22.6K" },
+  Punjab: { creators: "1,026", campaigns: "22", avgReach: "31.2K" },
+  Haryana: { creators: "1,037", campaigns: "23", avgReach: "32.1K" },
+  Odisha: { creators: "914", campaigns: "24", avgReach: "28.7K" },
+  Jharkhand: { creators: "784", campaigns: "16", avgReach: "25.3K" },
+  Chhattisgarh: { creators: "701", campaigns: "14", avgReach: "22.5K" },
+  Assam: { creators: "769", campaigns: "12", avgReach: "24.1K" },
+  "Andhra Pradesh": { creators: "949", campaigns: "20", avgReach: "29.1K" },
+  Uttarakhand: { creators: "852", campaigns: "18", avgReach: "24.9K" },
+  "Andaman and Nicobar": { creators: "167", campaigns: "4", avgReach: "8.3K" },
+  Goa: { creators: "316", campaigns: "8", avgReach: "15.2K" },
+  Himachal: { creators: "412", campaigns: "10", avgReach: "18.7K" },
+  Jammu: { creators: "438", campaigns: "11", avgReach: "19.4K" },
+  Meghalaya: { creators: "221", campaigns: "7", avgReach: "11.9K" },
+  Manipur: { creators: "189", campaigns: "5", avgReach: "10.6K" },
+  Mizoram: { creators: "144", campaigns: "3", avgReach: "8.9K" },
+  Nagaland: { creators: "154", campaigns: "4", avgReach: "9.2K" },
+  Sikkim: { creators: "122", campaigns: "4", avgReach: "7.4K" },
+  Tripura: { creators: "168", campaigns: "6", avgReach: "9.8K" },
+  Arunachal: { creators: "177", campaigns: "6", avgReach: "10.1K" },
+  Puducherry: { creators: "198", campaigns: "7", avgReach: "11.5K" },
+  Lakshadweep: { creators: "53", campaigns: "2", avgReach: "3.6K" },
+  Dadra: { creators: "88", campaigns: "3", avgReach: "4.7K" },
+};
+
+type RingCoordinates = Array<[number, number]>;
+type PolygonCoordinates = Array<RingCoordinates>;
+type MultiPolygonCoordinates = Array<PolygonCoordinates>;
+type IndiaGeoJson = {
+  features: Array<{
+    properties: { NAME_1: string };
+    geometry: {
+      type: "Polygon" | "MultiPolygon";
+      coordinates: PolygonCoordinates | MultiPolygonCoordinates;
+    };
+  }>;
+};
+
+type IndiaMapData = ReturnType<typeof buildIndiaMapData>;
+
+function getStateMetrics(stateName: string) {
+  return stateMetrics[stateName] ?? { creators: "421", campaigns: "9", avgReach: "14.2K" };
+}
+
+function projectPoint(lon: number, lat: number, bounds: { minLon: number; maxLon: number; minLat: number; maxLat: number }) {
+  const x = 56 + ((lon - bounds.minLon) / (bounds.maxLon - bounds.minLon)) * 648;
+  const y = 650 - ((lat - bounds.minLat) / (bounds.maxLat - bounds.minLat)) * 540;
+
+  return { x, y };
+}
+
+function buildIndiaMapData(geoJson: IndiaGeoJson) {
+  const features = geoJson.features;
+
+  let minLon = Infinity;
+  let maxLon = -Infinity;
+  let minLat = Infinity;
+  let maxLat = -Infinity;
+
+  const allCoordinates = features.flatMap((feature) => {
+    const polygons = feature.geometry.type === "Polygon"
+      ? [feature.geometry.coordinates as PolygonCoordinates]
+      : (feature.geometry.coordinates as MultiPolygonCoordinates);
+
+    return polygons.flatMap((polygon: PolygonCoordinates) => polygon.flatMap((ring: RingCoordinates) => ring.map(([lon, lat]: [number, number]) => {
+      minLon = Math.min(minLon, lon);
+      maxLon = Math.max(maxLon, lon);
+      minLat = Math.min(minLat, lat);
+      maxLat = Math.max(maxLat, lat);
+      return [lon, lat] as [number, number];
+    })));
+  });
+
+  const bounds = { minLon, maxLon, minLat, maxLat };
+
+  const projectedFeatures = features.map((feature) => {
+    const polygons = feature.geometry.type === "Polygon"
+      ? [feature.geometry.coordinates as PolygonCoordinates]
+      : (feature.geometry.coordinates as MultiPolygonCoordinates);
+
+    const paths = polygons.map((polygon: PolygonCoordinates) => {
+      const ring = polygon[0] ?? [];
+      const pathData = ring
+        .map(([lon, lat]: [number, number], index: number) => {
+          const point = projectPoint(lon, lat, bounds);
+          return `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`;
+        })
+        .join(" ");
+
+      return `${pathData} Z`;
+    });
+
+    return {
+      name: feature.properties.NAME_1,
+      paths,
+    };
+  });
+
+  const projectedCities = cityNodes.map((city) => ({
+    ...city,
+    ...projectPoint(city.lon, city.lat, bounds),
+  }));
+
+  return { projectedFeatures, projectedCities, bounds, allCoordinates };
+}
+
+function IndiaCoverageMap({ selectedRegion, onRegionChange }: { selectedRegion: number; onRegionChange: (index: number) => void }) {
+  const [hoveredState, setHoveredState] = useState<string | null>(null);
+  const [selectedState, setSelectedState] = useState<string | null>(null);
+  const [selectedCity, setSelectedCity] = useState<(typeof cityNodes)[number] | null>(null);
+  const [mapData, setMapData] = useState<IndiaMapData | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetch("/india_state.geojson")
+      .then((response) => response.json() as Promise<IndiaGeoJson>)
+      .then((geoJson) => {
+        if (isMounted) {
+          setMapData(buildIndiaMapData(geoJson));
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to load India geojson data", error);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const regionCityNames = new Set(creatorRegions[selectedRegion].cities);
+  const regionStateNames = new Set(
+    cityNodes.filter((city) => regionCityNames.has(city.name)).map((city) => city.state),
+  );
+
+  const activeStateName = hoveredState ?? selectedState ?? null;
+  const contentState = selectedState ?? (selectedRegion >= 0 ? creatorRegions[selectedRegion].name : "India");
+
+  const stateCard = activeStateName ? getStateMetrics(activeStateName) : null;
+
+  if (!mapData) {
+    return (
+      <div className="soft-card rounded-[30px] border border-white/10 bg-[#0a0a0a]/80 p-6 text-white/70">
+        Loading coverage map…
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="grid gap-8 lg:grid-cols-[0.88fr_1.12fr]">
+        <Reveal className="soft-card rounded-[30px] border border-white/10 bg-[#0a0a0a]/80 p-5 md:p-6">
+          <div className="space-y-4">
+            {creatorRegions.map((region, index) => (
+              <motion.button
+                key={region.name}
+                whileHover={{ x: 4, scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
+                onClick={() => {
+                  onRegionChange(index);
+                  setSelectedState(null);
+                  setSelectedCity(null);
+                }}
+                className={`w-full rounded-[22px] border px-4 py-4 text-left transition ${
+                  selectedRegion === index
+                    ? "border-lime-300/80 bg-[linear-gradient(135deg,rgba(197,255,42,0.18),rgba(17,17,17,0.8))] text-lime-300 shadow-[0_0_30px_rgba(197,255,42,0.12)]"
+                    : "border-white/10 bg-white/5 text-white/70 hover:border-lime-300/60 hover:text-lime-200"
+                }`}
+              >
+                <div className="mb-2 flex items-center justify-between">
+                  <span className="text-[10px] uppercase tracking-[0.28em]">{region.name}</span>
+                  <ArrowUpRight className="h-4 w-4" />
+                </div>
+                <div className="flex flex-wrap gap-2 text-[10px] uppercase tracking-[0.22em]">
+                  {region.cities.map((city) => (
+                    <span key={city} className="rounded-full border border-current/20 bg-black/10 px-2 py-1">
+                      {city}
+                    </span>
+                  ))}
+                </div>
+              </motion.button>
+            ))}
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.08} className="soft-card overflow-hidden rounded-[30px] border border-white/10 bg-[#0a0a0a]/80 p-4 md:p-6">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
+            className="relative min-h-[520px] overflow-hidden rounded-[24px] border border-white/10 bg-[radial-gradient(circle_at_center,_rgba(197,255,42,0.12),transparent_28%),linear-gradient(135deg,#0c0c0c,#151515)] p-4"
+          >
+            <div className="absolute inset-0 opacity-50 [background-image:linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:36px_36px]" />
+
+            <div className="relative z-10 flex h-full flex-col">
+              <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.28em] text-white/50">
+                <span>Coverage</span>
+                <span>{contentState}</span>
+              </div>
+
+              <div className="mt-4 flex-1 rounded-[20px] border border-white/10 bg-black/20">
+                <svg viewBox="0 0 760 700" className="h-full w-full">
+                  <defs>
+                    <radialGradient id="stateGlow" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stopColor="rgba(197,255,42,0.28)" />
+                      <stop offset="100%" stopColor="rgba(197,255,42,0.02)" />
+                    </radialGradient>
+                  </defs>
+
+                  <g>
+                    {mapData.projectedFeatures.map((feature) => {
+                      const isSelectedState = feature.name === selectedState;
+                      const inRegion = regionStateNames.has(feature.name);
+                      const stateOpacity = selectedState
+                        ? feature.name === selectedState
+                          ? 1
+                          : 0.28
+                        : selectedRegion >= 0 && regionStateNames.size > 0
+                          ? inRegion
+                            ? 1
+                            : 0.28
+                          : 1;
+
+                      const fillColor = isSelectedState
+                        ? "rgba(197,255,42,0.22)"
+                        : inRegion
+                          ? "rgba(197,255,42,0.12)"
+                          : "rgba(255,255,255,0.025)";
+
+                      return (
+                        <g key={feature.name}>
+                          {feature.paths.map((pathData, index) => (
+                            <motion.path
+                              key={`${feature.name}-${index}`}
+                              d={pathData}
+                              fill={fillColor}
+                              stroke={isSelectedState ? "rgba(197,255,42,0.95)" : "rgba(255,255,255,0.2)"}
+                              strokeWidth={isSelectedState ? 1.5 : 0.8}
+                              initial={{ opacity: 0, pathLength: 0 }}
+                              animate={{ opacity: stateOpacity, pathLength: 1 }}
+                              transition={{ duration: 1.1, ease: "easeInOut", delay: index * 0.02 }}
+                              className="cursor-pointer transition-all duration-200"
+                              onMouseEnter={() => setHoveredState(feature.name)}
+                              onMouseLeave={() => setHoveredState(null)}
+                              onClick={() => {
+                                setSelectedState(feature.name);
+                                setSelectedCity(null);
+                              }}
+                            />
+                          ))}
+                        </g>
+                      );
+                    })}
+                  </g>
+
+                  {mapData.projectedCities.map((city) => {
+                    const isInRegion = regionCityNames.has(city.name);
+                    const isSelectedCity = selectedCity?.name === city.name;
+                    const cityOpacity = selectedState
+                      ? city.state === selectedState
+                        ? 1
+                        : 0.2
+                      : selectedRegion >= 0 && regionCityNames.size > 0
+                        ? isInRegion
+                          ? 1
+                          : 0.3
+                        : 1;
+
+                    return (
+                      <g key={city.name}>
+                        <motion.circle
+                          cx={city.x}
+                          cy={city.y}
+                          r={isSelectedCity ? 12 : 7}
+                          fill={isSelectedCity ? "#d8ff68" : "#c5ff2a"}
+                          opacity={cityOpacity}
+                          animate={{ scale: isSelectedCity ? [1, 1.25, 1] : [1, 1.1, 1], opacity: cityOpacity }}
+                          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+                          onMouseEnter={() => setHoveredState(city.state)}
+                          onClick={() => setSelectedCity(city)}
+                          className="cursor-pointer"
+                        />
+                        <circle
+                          cx={city.x}
+                          cy={city.y}
+                          r={isSelectedCity ? 20 : 14}
+                          fill="transparent"
+                          stroke="rgba(197,255,42,0.25)"
+                          strokeWidth="1"
+                          strokeDasharray="4 6"
+                          opacity={cityOpacity}
+                        />
+                      </g>
+                    );
+                  })}
+                </svg>
+              </div>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                {creatorRegions[selectedRegion].cities.map((city) => (
+                  <motion.span
+                    key={city}
+                    layout
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.2 }}
+                    className="rounded-full border border-white/15 bg-white/5 px-2.5 py-1.5 text-[10px] uppercase tracking-[0.22em] text-white/70"
+                  >
+                    {city}
+                  </motion.span>
+                ))}
+              </div>
+            </div>
+
+            {selectedCity && (
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                className="absolute bottom-4 left-4 z-20 max-w-[280px] rounded-[22px] border border-lime-300/50 bg-[#0a0a0a]/90 p-4 shadow-[0_0_24px_rgba(197,255,42,0.12)] backdrop-blur-lg"
+              >
+                <p className="text-[10px] uppercase tracking-[0.32em] text-lime-300">City coverage</p>
+                <h4 className="mt-2 text-xl font-black uppercase tracking-[-0.05em] text-white">{selectedCity.name}</h4>
+                <p className="mt-2 text-[10px] uppercase tracking-[0.2em] text-white/50">{selectedCity.state}</p>
+
+                <div className="mt-4 grid grid-cols-2 gap-2 text-[10px] uppercase tracking-[0.18em] text-white/70">
+                  <div className="rounded-xl border border-white/10 bg-white/5 p-2">
+                    <p className="text-white/45">Creators</p>
+                    <p className="mt-1 font-black text-white">{selectedCity.creators}</p>
+                  </div>
+                  <div className="rounded-xl border border-white/10 bg-white/5 p-2">
+                    <p className="text-white/45">Campaigns</p>
+                    <p className="mt-1 font-black text-white">{selectedCity.campaigns}</p>
+                  </div>
+                </div>
+
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {selectedCity.categories.map((category) => (
+                    <span key={category} className="rounded-full border border-white/10 bg-white/5 px-2 py-1 text-[9px] uppercase tracking-[0.18em] text-white/70">
+                      {category}
+                    </span>
+                  ))}
+                </div>
+
+                <p className="mt-3 text-[10px] uppercase tracking-[0.18em] text-lime-300">Avg. Reach {selectedCity.avgReach}</p>
+              </motion.div>
+            )}
+
+            {stateCard && (
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="absolute right-4 top-4 z-20 w-[230px] rounded-[20px] border border-lime-300/50 bg-[#0d0d0d]/85 p-3 shadow-[0_0_24px_rgba(197,255,42,0.12)] backdrop-blur-lg"
+              >
+                <p className="text-[10px] uppercase tracking-[0.28em] text-lime-300">State insight</p>
+                <h4 className="mt-2 text-lg font-black uppercase tracking-[-0.05em] text-white">{activeStateName}</h4>
+
+                <div className="mt-3 space-y-2 text-[10px] uppercase tracking-[0.18em] text-white/70">
+                  <div className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-2 py-1.5">
+                    <span>Creators</span>
+                    <span className="font-black text-white">{stateCard.creators}</span>
+                  </div>
+                  <div className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-2 py-1.5">
+                    <span>Campaigns</span>
+                    <span className="font-black text-white">{stateCard.campaigns}</span>
+                  </div>
+                  <div className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-2 py-1.5">
+                    <span>Avg. Reach</span>
+                    <span className="font-black text-lime-300">{stateCard.avgReach}</span>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </motion.div>
+        </Reveal>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-3">
+        <div className="rounded-[22px] border border-white/10 bg-[#0a0a0a]/70 p-5">
+          <p className="text-[10px] uppercase tracking-[0.32em] text-white/50">Total creators</p>
+          <div className="mt-3 text-4xl font-black tracking-[-0.08em] text-lime-300"><AnimatedCounter value={12840} suffix="+" /></div>
+        </div>
+        <div className="rounded-[22px] border border-white/10 bg-[#0a0a0a]/70 p-5">
+          <p className="text-[10px] uppercase tracking-[0.32em] text-white/50">Active cities</p>
+          <div className="mt-3 text-4xl font-black tracking-[-0.08em] text-lime-300"><AnimatedCounter value={24} /></div>
+        </div>
+        <div className="rounded-[22px] border border-white/10 bg-[#0a0a0a]/70 p-5">
+          <p className="text-[10px] uppercase tracking-[0.32em] text-white/50">Active campaigns</p>
+          <div className="mt-3 text-4xl font-black tracking-[-0.08em] text-lime-300"><AnimatedCounter value={186} /></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const creators = [
   {
     id: "anjuri-sinha",
@@ -244,103 +680,6 @@ function Reveal({ children, className = "", delay = 0 }: { children: React.React
     >
       {children}
     </motion.div>
-  );
-}
-
-function IndiaMapGraphic({ selectedRegion }: { selectedRegion: number }) {
-  const activeCities = new Set(creatorRegions[selectedRegion].cities);
-
-  const cityCoordinates: Record<string, { x: number; y: number }> = {
-    Mumbai: { x: 186, y: 321 },
-    "Delhi NCR": { x: 221, y: 214 },
-    Bengaluru: { x: 253, y: 372 },
-    Hyderabad: { x: 272, y: 308 },
-    Chennai: { x: 300, y: 395 },
-    Kolkata: { x: 362, y: 250 },
-    Pune: { x: 210, y: 298 },
-    Ahmedabad: { x: 155, y: 270 },
-    Surat: { x: 170, y: 290 },
-    Vadodara: { x: 173, y: 279 },
-    Rajkot: { x: 144, y: 276 },
-    Jaipur: { x: 193, y: 234 },
-    Chandigarh: { x: 234, y: 182 },
-    Lucknow: { x: 261, y: 204 },
-    Indore: { x: 212, y: 257 },
-    Bhopal: { x: 233, y: 245 },
-    Dehradun: { x: 247, y: 171 },
-    Kochi: { x: 272, y: 422 },
-    Coimbatore: { x: 295, y: 406 },
-    Mysuru: { x: 279, y: 389 },
-    Visakhapatnam: { x: 331, y: 329 },
-    Bhubaneswar: { x: 344, y: 306 },
-    Patna: { x: 306, y: 254 },
-    Ranchi: { x: 317, y: 278 },
-    Nagpur: { x: 260, y: 278 },
-  };
-
-  const indiaPath = "M176 74 L224 91 L252 84 L286 102 L328 136 L350 170 L368 198 L390 227 L382 252 L402 272 L383 304 L394 333 L372 362 L355 388 L332 407 L300 416 L274 447 L240 451 L221 427 L191 432 L169 413 L146 398 L122 366 L102 343 L83 318 L75 282 L61 246 L65 218 L85 209 L94 182 L113 170 L125 145 L151 126 L163 100 Z";
-
-  return (
-    <div className="relative mx-auto h-[340px] w-full max-w-[520px]">
-      <svg viewBox="0 0 520 520" className="h-full w-full drop-shadow-[0_0_30px_rgba(197,255,42,0.12)]">
-        <defs>
-          <radialGradient id="indiaGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="rgba(197,255,42,0.26)" />
-            <stop offset="70%" stopColor="rgba(197,255,42,0.09)" />
-            <stop offset="100%" stopColor="rgba(197,255,42,0.02)" />
-          </radialGradient>
-          <linearGradient id="indiaStroke" x1="0%" x2="100%" y1="0%" y2="0%">
-            <stop offset="0%" stopColor="rgba(197,255,42,0.95)" />
-            <stop offset="50%" stopColor="rgba(255,255,255,0.7)" />
-            <stop offset="100%" stopColor="rgba(197,255,42,0.95)" />
-          </linearGradient>
-        </defs>
-
-        <g opacity={0.25}>
-          <path d="M72 0 L72 520 M144 0 L144 520 M216 0 L216 520 M288 0 L288 520 M360 0 L360 520 M432 0 L432 520" stroke="rgba(255,255,255,0.12)" strokeWidth="1" />
-          <path d="M0 72 L520 72 M0 144 L520 144 M0 216 L520 216 M0 288 L520 288 M0 360 L520 360 M0 432 L520 432" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-        </g>
-
-        <motion.path
-          d={indiaPath}
-          fill="url(#indiaGlow)"
-          stroke="url(#indiaStroke)"
-          strokeWidth="2"
-          initial={{ opacity: 0.5, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          style={{ transformOrigin: "center" }}
-        />
-
-        {Object.entries(cityCoordinates).map(([city, position]) => {
-          const isActive = activeCities.has(city);
-
-          return (
-            <motion.g
-              key={city}
-              initial={{ opacity: 0.2, scale: 0.85 }}
-              animate={{ opacity: isActive ? 1 : 0.4, scale: isActive ? 1 : 0.9 }}
-              transition={{ duration: 0.35, ease: "easeOut" }}
-            >
-              <motion.circle
-                cx={position.x}
-                cy={position.y}
-                r={isActive ? 8 : 5}
-                fill={isActive ? "#c5ff2a" : "rgba(255,255,255,0.32)"}
-                stroke={isActive ? "rgba(197,255,42,0.95)" : "rgba(255,255,255,0.18)"}
-                strokeWidth={isActive ? 2 : 1}
-                animate={{
-                  scale: isActive ? [1, 1.35, 1] : 1,
-                  opacity: isActive ? [0.7, 1, 0.7] : 0.4,
-                }}
-                transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
-              />
-              <circle cx={position.x} cy={position.y} r={isActive ? 18 : 11} fill="transparent" stroke={isActive ? "rgba(197,255,42,0.35)" : "rgba(255,255,255,0.12)"} strokeWidth="1" strokeDasharray="4 6" />
-            </motion.g>
-          );
-        })}
-      </svg>
-    </div>
   );
 }
 
@@ -770,75 +1109,7 @@ export default function Home() {
             <p className="mt-5 text-base text-white/70 md:text-lg">WE FIND THE CREATOR FIT.</p>
           </Reveal>
 
-          <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-            <Reveal className="soft-card rounded-[30px] border border-white/10 bg-[#0a0a0a]/80 p-5 md:p-6">
-              <div className="space-y-4">
-                {creatorRegions.map((region, index) => (
-                  <motion.button
-                    key={region.name}
-                    whileHover={{ x: 4, scale: 1.01 }}
-                    whileTap={{ scale: 0.99 }}
-                    onClick={() => setSelectedRegion(index)}
-                    className={`w-full rounded-[22px] border px-4 py-4 text-left transition ${
-                      selectedRegion === index
-                        ? "border-lime-300/80 bg-[linear-gradient(135deg,rgba(197,255,42,0.18),rgba(17,17,17,0.8))] text-lime-300 shadow-[0_0_30px_rgba(197,255,42,0.12)]"
-                        : "border-white/10 bg-white/5 text-white/70 hover:border-lime-300/60 hover:text-lime-200"
-                    }`}
-                  >
-                    <div className="mb-2 flex items-center justify-between">
-                      <span className="text-[10px] uppercase tracking-[0.28em]">{region.name}</span>
-                      <ArrowUpRight className="h-4 w-4" />
-                    </div>
-                    <div className="flex flex-wrap gap-2 text-[10px] uppercase tracking-[0.22em]">
-                      {region.cities.map((city) => (
-                        <span key={city} className="rounded-full border border-current/20 bg-black/10 px-2 py-1">
-                          {city}
-                        </span>
-                      ))}
-                    </div>
-                  </motion.button>
-                ))}
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.08} className="soft-card overflow-hidden rounded-[30px] border border-white/10 bg-[#0a0a0a]/80 p-4 md:p-6">
-              <motion.div
-                key={selectedRegion}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.35, ease: "easeOut" }}
-                className="relative min-h-[520px] overflow-hidden rounded-[24px] border border-white/10 bg-[radial-gradient(circle_at_center,_rgba(197,255,42,0.18),transparent_25%),linear-gradient(135deg,#0c0c0c,#151515)] p-4"
-              >
-                <div className="absolute inset-0 opacity-50 [background-image:linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:36px_36px]" />
-
-                <div className="relative z-10 flex h-full flex-col justify-between">
-                  <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.28em] text-white/50">
-                    <span>Coverage</span>
-                    <span>{creatorRegions[selectedRegion].name}</span>
-                  </div>
-
-                  <div className="mt-4 flex-1">
-                    <IndiaMapGraphic selectedRegion={selectedRegion} />
-                  </div>
-
-                  <motion.div layout className="mt-4 flex flex-wrap gap-2">
-                    {creatorRegions[selectedRegion].cities.map((city) => (
-                      <motion.span
-                        key={city}
-                        layout
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.2 }}
-                        className="rounded-full border border-white/15 bg-white/5 px-2.5 py-1.5 text-[10px] uppercase tracking-[0.22em] text-white/70"
-                      >
-                        {city}
-                      </motion.span>
-                    ))}
-                  </motion.div>
-                </div>
-              </motion.div>
-            </Reveal>
-          </div>
+          <IndiaCoverageMap selectedRegion={selectedRegion} onRegionChange={setSelectedRegion} />
         </div>
       </section>
 
