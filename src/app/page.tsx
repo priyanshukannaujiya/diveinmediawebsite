@@ -406,31 +406,29 @@ function IndiaCoverageMap({ selectedRegion, onRegionChange }: { selectedRegion: 
                       const stateOpacity = selectedState
                         ? feature.name === selectedState
                           ? 1
-                          : 0.28
+                          : 0.4
                         : selectedRegion >= 0 && regionStateNames.size > 0
                           ? inRegion
                             ? 1
-                            : 0.28
+                            : 0.4
                           : 1;
 
                       const fillColor = isSelectedState
-                        ? "rgba(197,255,42,0.22)"
+                        ? "rgba(197,255,42,0.42)"
                         : inRegion
-                          ? "rgba(197,255,42,0.12)"
-                          : "rgba(255,255,255,0.025)";
+                          ? "rgba(197,255,42,0.24)"
+                          : "rgba(255,255,255,0.08)";
 
                       return (
                         <g key={feature.name}>
                           {feature.paths.map((pathData, index) => (
-                            <motion.path
+                            <path
                               key={`${feature.name}-${index}`}
                               d={pathData}
                               fill={fillColor}
-                              stroke={isSelectedState ? "rgba(197,255,42,0.95)" : "rgba(255,255,255,0.2)"}
-                              strokeWidth={isSelectedState ? 1.5 : 0.8}
-                              initial={{ opacity: 0, pathLength: 0 }}
-                              animate={{ opacity: stateOpacity, pathLength: 1 }}
-                              transition={{ duration: 1.1, ease: "easeInOut", delay: index * 0.02 }}
+                              stroke={isSelectedState ? "rgba(197,255,42,0.95)" : "rgba(255,255,255,0.32)"}
+                              strokeWidth={isSelectedState ? 1.5 : 0.9}
+                              opacity={stateOpacity}
                               className="cursor-pointer transition-all duration-200"
                               onMouseEnter={() => setHoveredState(feature.name)}
                               onMouseLeave={() => setHoveredState(null)}
@@ -451,35 +449,34 @@ function IndiaCoverageMap({ selectedRegion, onRegionChange }: { selectedRegion: 
                     const cityOpacity = selectedState
                       ? city.state === selectedState
                         ? 1
-                        : 0.2
+                        : 0.28
                       : selectedRegion >= 0 && regionCityNames.size > 0
                         ? isInRegion
                           ? 1
-                          : 0.3
+                          : 0.4
                         : 1;
 
                     return (
                       <g key={city.name}>
-                        <motion.circle
+                        <circle
                           cx={city.x}
                           cy={city.y}
-                          r={isSelectedCity ? 12 : 7}
-                          fill={isSelectedCity ? "#d8ff68" : "#c5ff2a"}
+                          r={isSelectedCity ? 11 : 7}
+                          fill={isSelectedCity ? "#e7ff8b" : "#c5ff2a"}
                           opacity={cityOpacity}
-                          animate={{ scale: isSelectedCity ? [1, 1.25, 1] : [1, 1.1, 1], opacity: cityOpacity }}
-                          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
                           onMouseEnter={() => setHoveredState(city.state)}
                           onClick={() => setSelectedCity(city)}
                           className="cursor-pointer"
+                          style={{ transition: "all 0.2s ease" }}
                         />
                         <circle
                           cx={city.x}
                           cy={city.y}
-                          r={isSelectedCity ? 20 : 14}
+                          r={isSelectedCity ? 18 : 13}
                           fill="transparent"
-                          stroke="rgba(197,255,42,0.25)"
-                          strokeWidth="1"
-                          strokeDasharray="4 6"
+                          stroke={isSelectedCity ? "rgba(197,255,42,0.75)" : "rgba(197,255,42,0.28)"}
+                          strokeWidth={isSelectedCity ? 1.2 : 0.8}
+                          strokeDasharray={isSelectedCity ? "3 5" : "2 8"}
                           opacity={cityOpacity}
                         />
                       </g>
